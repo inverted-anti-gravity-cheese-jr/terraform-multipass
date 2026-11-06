@@ -50,8 +50,10 @@ if [ -n "${CLUSTER_NAME}" ]; then
         # Wait for node to be ready
         exec_in_vm "sudo microk8s status --wait-ready"
         
-        # Enable addons
-        exec_in_vm sudo microk8s enable $ADDONS
+        # Enable addons (only if not empty)
+        if [ -n "$ADDONS" ]; then
+            exec_in_vm sudo microk8s enable $ADDONS
+        fi
     else
         # Create new cluster (first node in cluster)
         echo "Creating new cluster with node ${NODE_NAME}"
@@ -60,7 +62,9 @@ if [ -n "${CLUSTER_NAME}" ]; then
         exec_in_vm sudo apt update
         exec_in_vm sudo apt install -y jq yq
         exec_in_vm sudo snap install microk8s --classic
-        exec_in_vm sudo microk8s enable $ADDONS
+        if [ -n "$ADDONS" ]; then
+            exec_in_vm sudo microk8s enable $ADDONS
+        fi
     fi
 else
     # Original behavior: create independent cluster
@@ -68,7 +72,9 @@ else
     
     exec_in_vm sudo apt install -y jq yq
     exec_in_vm sudo snap install microk8s --classic
-    exec_in_vm sudo microk8s enable $ADDONS
+    if [ -n "$ADDONS" ]; then
+        exec_in_vm sudo microk8s enable $ADDONS
+    fi
 fi
 
 SERVER_IP="$(multipass info --format json $NODE_NAME | jq ".info.\"$NODE_NAME\".ipv4")"
