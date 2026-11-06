@@ -16,6 +16,7 @@ resource "null_resource" "kubernetes_node" {
     triggers = {
         node_name = var.node_name
         cluster_name = var.cluster_name
+        cluster_data_file = local.cluster_data_file
         always_run = timestamp()
     }
 
@@ -35,7 +36,7 @@ resource "null_resource" "kubernetes_node" {
             MULTIPASS_IMAGE = var.multipass_image
             ADDONS = local.kubernetes_addons
             CLUSTER_NAME = var.cluster_name
-            CLUSTER_DATA_FILE = local.cluster_data_file
+            CLUSTER_DATA_FILE = self.triggers.cluster_data_file
         }
     }
 
@@ -46,18 +47,7 @@ resource "null_resource" "kubernetes_node" {
         EOT
         environment = {
             NODE_NAME = self.triggers.node_name
-            CLUSTER_DATA_FILE = local.cluster_data_file
-        }
-    }
-
-    provisioner "local-exec" {
-        when    = read
-        command = <<EOT
-            ${path.module}/scripts/read_cluster.sh
-        EOT
-        environment = {
-            NODE_NAME = var.node_name
-            CLUSTER_DATA_FILE = local.cluster_data_file
+            CLUSTER_DATA_FILE = self.triggers.cluster_data_file
         }
     }
 }
