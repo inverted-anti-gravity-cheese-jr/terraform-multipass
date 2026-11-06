@@ -6,4 +6,10 @@ check_if_installed() {
 
 check_if_installed multipass
 
+# Delete the VM
 multipass delete --purge ${NODE_NAME}
+
+# Remove cluster data file if it exists
+if [ -n "${CLUSTER_DATA_FILE}" ] && [ -f "${CLUSTER_DATA_FILE}" ]; then
+    rm -f "${CLUSTER_DATA_FILE}"
+fi
