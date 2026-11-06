@@ -23,7 +23,7 @@ if [ -n "${CLUSTER_NAME}" ]; then
     if [ -n "$EXISTING_NODES" ]; then
         # Join existing cluster
         FIRST_NODE=$(echo "$EXISTING_NODES" | head -n 1)
-        FIRST_NODE_IP=$(multipass info --format json $FIRST_NODE | jq -r ".info."$FIRST_NODE".ipv4")
+        FIRST_NODE_IP=$(multipass info --format json "$FIRST_NODE" | jq -r ".info.\"${FIRST_NODE}\".ipv4")
         
         echo "Joining node ${NODE_NAME} to existing cluster via node ${FIRST_NODE} (${FIRST_NODE_IP})"
         
