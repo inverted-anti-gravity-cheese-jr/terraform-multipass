@@ -24,4 +24,14 @@ KUBECONF_USER="$(get_kube_config '.users[0].name')"
 KUBECONF_USER_CA="$(get_kube_config '.users[0].user."client-certificate-data"')"
 KUBECONF_USER_KEY="$(get_kube_config '.users[0].user."client-key-data"')"
 
-echo "{\"serverIp\": $SERVER_IP, \"serverName\": $KUBECONF_SERVER_NAME, \"caData\": $KUBECONF_CA_DATA, \"userName\": $KUBECONF_USER, \"userCaData\": $KUBECONF_USER_CA, \"userKeyData\": $KUBECONF_USER_KEY}" | jq
+# Write cluster data to file
+cat > "${CLUSTER_DATA_FILE}" <<EOF
+{
+  "serverIp": $SERVER_IP,
+  "serverName": $KUBECONF_SERVER_NAME,
+  "caData": $KUBECONF_CA_DATA,
+  "userName": $KUBECONF_USER,
+  "userCaData": $KUBECONF_USER_CA,
+  "userKeyData": $KUBECONF_USER_KEY
+}
+EOF
