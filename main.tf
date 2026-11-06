@@ -24,6 +24,7 @@ resource "shell_script" "kubernetes_node" {
         NODE_CPU = var.node_cpu
         MULTIPASS_IMAGE = var.multipass_image
         ADDONS = local.kubernetes_addons
+        CLUSTER_NAME = var.cluster_name
     }
 }
 

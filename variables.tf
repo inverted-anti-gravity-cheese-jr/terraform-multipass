@@ -24,3 +24,9 @@ variable "addons" {
   type        = list(string)
   default     = [ "cert-manager", "dashboard", "ingress", "prometheus" ]
 }
+
+variable "cluster_name" {
+  description = "The name of the Kubernetes cluster. Nodes with the same cluster_name will form a multi-node cluster. If empty, each node is independent."
+  type        = string
+  default     = ""
+}
